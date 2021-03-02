@@ -10,7 +10,7 @@ rackNo   =    0
 #  s71500 slot number:
 slotNo   =    1
 #  s71500 device number:
-deviceNr =    2
+#  deviceNr =    2
 # s71500 ip adress:
 PLC_IP   =    '169.254.12.77'
 # cloud server adress:
@@ -27,7 +27,8 @@ clientname = "simchengProducer"
 username   = "simcheng"
 # client password:
 password   = "Simcheng2020"
-
+# max instances for scheduler [sec]
+TIMELIMIT  = 1e25
 ### IP upload Parameters ###
 organId = 2002
 devId   = "3001"            # device ID
@@ -55,6 +56,6 @@ def step_fun_upload_ip():
 if __name__ == "__main__":
     mqttClient = s7SimchengLib.on_mqtt_connect(mqtthost,mqttport,clientname,username,password)
     sched = s7SimchengLib.task_scheduler()
-    sched.add_job(step_fun_plc, 'cron', second='*/'+str(ts_plc_update),hour='*',max_instances = int(1e25))
-    sched.add_job(step_fun_upload_ip, 'cron', second='*/'+str(ts_ip_update),hour='*',max_instances = int(1e25))
+    sched.add_job(step_fun_plc, 'cron', second='*/'+str(ts_plc_update),hour='*',max_instances = int(TIMELIMIT))
+    sched.add_job(step_fun_upload_ip, 'cron', second='*/'+str(ts_ip_update),hour='*',max_instances = int(TIMELIMIT))
     sched.start()
